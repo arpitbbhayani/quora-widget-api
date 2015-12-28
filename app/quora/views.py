@@ -1,24 +1,32 @@
 import app
 import requests
 from flask import Blueprint
-from flask import render_template, request
+from flask import render_template, request, jsonify
 
 from bs4 import BeautifulSoup
 
 mod = Blueprint('quora_api', __name__, template_folder='templates')
 
+@mod.route('/', methods=["GET"])
+def index():
+    return jsonify(message='Yay! Everything seems to working well ... lets get going')
+
 @mod.route('/process', methods=["GET"])
 def process():
     profile_page_url = request.args.get('url')
 
-    if not profile_page_url or '//www.quora.com/profile/' not in profile_page_url:
-        return render_template('quora-widget/error.html', \
+    if not profile_page_url:
+        return render_template('quora_widget_error.html', \
+                error='Empty profile URL', message='Got nothing to render :-(')
+
+    if '//www.quora.com/profile/' not in profile_page_url:
+        return render_template('quora_widget_error.html', \
                 error='Invalid Profile URL : ' + profile_page_url, message='Please provide a correct profile URL. It looks something link this "https://www.quora.com/profile/Arpit-Bhayani"')
 
     quora_profile = requests.get(profile_page_url)
 
     if quora_profile.status_code != 200:
-        return render_template('quora-widget/error.html', \
+        return render_template('quora_widget_error.html', \
                 error='Profile does not exists', message="Unable to fetch any page for this profile.")
 
     answers_page_url = profile_page_url.strip('/') + '/answers'
@@ -79,7 +87,7 @@ def process():
     # Fetch Answers Page
     quora_answers = requests.get(answers_page_url)
     if quora_answers.status_code != 200:
-        return render_template('quora-widget/error.html', \
+        return render_template('quora_widget_error.html', \
                 error=quora_answers.text)
 
     soup = BeautifulSoup(quora_answers.text, 'html.parser')
@@ -121,7 +129,7 @@ def process():
     #         }
     #     })
 
-    return render_template('quora-widget/card.html', \
+    return render_template('quora_widget_card.html', \
             profile_info=profile_info, highlights=highlights, stats=stats, \
             count_answers=count_answers, count_followers=count_followers)
 
