@@ -9,8 +9,7 @@ mod = Blueprint('quora_api', __name__, template_folder='templates')
 
 @mod.route('/', methods=["GET"])
 def index():
-    return jsonify(message='Yay! Everything seems to working well ... ' +
-                   'lets get going')
+    return jsonify(message='Hello world!')
 
 
 @mod.route('/process', methods=["GET"])
