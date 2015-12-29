@@ -4,14 +4,12 @@ This API is the mastermind of [Quora-Widget](https://github.com/arpitbbhayani/qu
 
 Ingredients
 -----------------------------------------
-1. Python
- This API is written in [Python](https://www.python.org/download/releases/2.7/) and have no backend whatsoever.
 
-2.  Flask
-The web framework used for exposing API is [Flask](http://flask.pocoo.org/). And to make code modular, some flask extensions are used.
+1. **Python**: This API is written in [Python](https://www.python.org/download/releases/2.7/) and have no backend whatsoever.
 
-3.  HTML/CSS
-To make things beautiful HTML/CSS plays the most important role.
+2. **Flask**: The web framework used for exposing API is [Flask](http://flask.pocoo.org/). And to make code modular, some flask extensions are used.
+
+3. **HTML/CSS**: To make things beautiful HTML/CSS plays the most important role.
 
 Installation
 -------------------------------------------
