@@ -1,4 +1,3 @@
-import app
 import requests
 from flask import Blueprint
 from flask import render_template, request, jsonify
@@ -7,27 +6,36 @@ from bs4 import BeautifulSoup
 
 mod = Blueprint('quora_api', __name__, template_folder='templates')
 
+
 @mod.route('/', methods=["GET"])
 def index():
-    return jsonify(message='Yay! Everything seems to working well ... lets get going')
+    return jsonify(message='Yay! Everything seems to working well ... ' +
+                   'lets get going')
+
 
 @mod.route('/process', methods=["GET"])
 def process():
     profile_page_url = request.args.get('url')
 
     if not profile_page_url:
-        return render_template('quora_widget_error.html', \
-                error='Empty profile URL', message='Got nothing to render :-(')
+        return render_template('quora_widget_error.html',
+                               error='Empty profile URL',
+                               message='Got nothing to render :-(')
 
     if '//www.quora.com/profile/' not in profile_page_url:
-        return render_template('quora_widget_error.html', \
-                error='Invalid Profile URL : ' + profile_page_url, message='Please provide a correct profile URL. It looks something link this "https://www.quora.com/profile/Arpit-Bhayani"')
+        return render_template('quora_widget_error.html',
+                               error='Invalid Profile URL:' + profile_page_url,
+                               message='Please provide a proper profile URL.' +
+                               'It looks something link this ' +
+                               '"https://www.quora.com/profile/Arpit-Bhayani"')
 
     quora_profile = requests.get(profile_page_url)
 
     if quora_profile.status_code != 200:
-        return render_template('quora_widget_error.html', \
-                error='Profile does not exists', message="Unable to fetch any page for this profile.")
+        return render_template('quora_widget_error.html',
+                               error='Profile does not exists',
+                               message="Unable to fetch any page for this " +
+                               "profile.")
 
     answers_page_url = profile_page_url.strip('/') + '/answers'
 
@@ -36,7 +44,9 @@ def process():
     # Profile Info
     html_profile_info = soup.find(attrs={'class': 'ProfileNameAndSig'})
 
-    profile_pic = soup.find(attrs={'class': 'profile_photo_img'}).get('data-src')
+    profile_pic = soup.find(attrs={'class': 'profile_photo_img'})\
+        .get('data-src')
+
     profile_name = html_profile_info.find('h1').text.strip()
     try:
         profile_bio = html_profile_info.find(attrs={'class': 'rendered_qtext'})\
@@ -60,35 +70,35 @@ def process():
 
         for html_highlight in html_highlights:
             highlights.append({
-                    'title': html_highlight.find(attrs={'class': 'title'})\
-                            .text.strip(),
-                    'detail': html_highlight.find(attrs={'class': 'detail'})\
-                            .text.strip()
+                'title': html_highlight.find(attrs={'class': 'title'})
+                .text.strip(),
+                'detail': html_highlight.find(attrs={'class': 'detail'})
+                .text.strip()
             })
 
     # Stats
     stats = []
-    html_stats_info = soup.findAll(attrs={'class':'stat'})
+    html_stats_info = soup.findAll(attrs={'class': 'stat'})
 
     for html_stat in html_stats_info:
         stats.append({
-            'title': html_stat.find(attrs={'class': 'stat_label'})\
-                    .text.strip(),
-            'detail': html_stat.find(attrs={'class': 'total_count'})\
-                    .text.strip()
+            'title': html_stat.find(attrs={'class': 'stat_label'})
+            .text.strip(),
+            'detail': html_stat.find(attrs={'class': 'total_count'})
+            .text.strip()
         })
 
     # Primary Stats
     count_answers = soup.find(attrs={'class': 'AnswersNavItem'})\
-                        .find('span').text.strip()
+        .find('span').text.strip()
     count_followers = soup.find(attrs={'class': 'FollowersNavItem'})\
-                        .find('span').text.strip()
+        .find('span').text.strip()
 
     # Fetch Answers Page
     quora_answers = requests.get(answers_page_url)
     if quora_answers.status_code != 200:
-        return render_template('quora_widget_error.html', \
-                error=quora_answers.text)
+        return render_template('quora_widget_error.html',
+                               error=quora_answers.text)
 
     soup = BeautifulSoup(quora_answers.text, 'html.parser')
 
@@ -129,9 +139,10 @@ def process():
     #         }
     #     })
 
-    return render_template('quora_widget_card.html', \
-            profile_info=profile_info, highlights=highlights, stats=stats, \
-            count_answers=count_answers, count_followers=count_followers)
+    return render_template('quora_widget_card.html',
+                           profile_info=profile_info, highlights=highlights,
+                           stats=stats, count_answers=count_answers,
+                           count_followers=count_followers)
 
     # return render_template('quora-widget/widget.html', \
     #         profile_info=profile_info, highlights=highlights, stats=stats, \
