@@ -71,3 +71,15 @@ Contribute
 If you want to contribute, checkout [Github Issues](https://github.com/arpitbbhayani/quora-widget-api/issues) and choose any task you want and start working on it and when you think you are done, create a Pull Request for your branch.
 
 In case of any doubt drop me an email at [arpit.b.bhayani@gmail.com](mailto:arpit.b.bhayani@gmail.com)
+
+
+How to submit your patch
+------------------------------------------------
+1. Pick an issue
+You should first pick an issue from existing [Github Issues](https://github.com/arpitbbhayani/quora-widget/issues) to work on.
+
+2. Code!
+Once you understand the issue,  create your own branch and code! In case you have any query feel free to drop me an email at [arpit.b.bhayani@gmail.com](mailto:arpit.b.bhayani@gmail.com)
+
+3. Submit a Pull Request
+Since you have made all changes in your code and you are sure that everything will work fine, simply create a pull request. Once you create a pull request, I will merge it to the master branch after a code review.
